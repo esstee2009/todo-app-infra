@@ -7,9 +7,13 @@ trigger:
 
   paths: 
     include: 
-    - '$(System.DefaultWorkingDirectory)/environment/dev'
+    - '$(WorkDir)'
 
 pool: NovAgent
+
+variables: 
+  WorkDir: '$(System.DefaultWorkingDirectory)/environment/dev'
+  ServConnect: 'Azure subscription 1(bc524287-f28f-43cf-9bc7-37559e1c0887)'
 
 stages:
   - stage: Build
@@ -21,8 +25,8 @@ stages:
           inputs:
             provider: 'azurerm'
             command: 'init'
-            workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
-            backendServiceArm: 'Azure subscription 1(bc524287-f28f-43cf-9bc7-37559e1c0887)'
+            workingDirectory: '$(WorkDir)'
+            backendServiceArm: '$(ServConnect)'
             backendAzureRmStorageAccountName: 'tfstorage24'
             backendAzureRmContainerName: 'cloudcore'
             backendAzureRmKey: 'dev.tfstate'
@@ -31,11 +35,29 @@ stages:
           inputs:
             provider: 'azurerm'
             command: 'validate'
-            workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
+            workingDirectory: '$(WorkDir)'
 
         - task: TerraformTask@5
           inputs:
             provider: 'azurerm'
             command: 'plan'
-            workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
-            environmentServiceNameAzureRM: 'Azure subscription 1(bc524287-f28f-43cf-9bc7-37559e1c0887)'
+            workingDirectory: '$(WorkDir)'
+            environmentServiceNameAzureRM: '$(ServConnect)'
+
+  - stage: Scan
+    displayName: Scan
+    jobs:
+      - job: TfSecCheckov
+        displayName: Scanning Tools
+        steps:
+        - task: tfsec@1
+          inputs:
+            version: 'v1.26.0'
+            dir: '$(WorkDir)'
+
+        - task: PowerShell@2
+          inputs:
+            targetType: 'inline'
+            script: |
+              cd $(System.DefaultWorkingDirectory)/environment/dev
+              checkov -d .
