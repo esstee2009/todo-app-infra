@@ -1,0 +1,40 @@
+trigger: 
+
+  branches: 
+    include: 
+    - main
+    - feature/*
+
+  paths: 
+    include: 
+    - '$(System.DefaultWorkingDirectory)/environment/dev'
+
+pool: NovAgent
+
+stages:
+  - stage: Build
+    displayName: Build
+    jobs:
+      - job: TerraformInitPlan
+        steps:
+        - task: TerraformTask@5
+          inputs:
+            provider: 'azurerm'
+            command: 'init'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
+            backendAzureRmStorageAccountName: 'tfstorage24'
+            backendAzureRmContainerName: 'cloudcore'
+            backendAzureRmKey: 'dev.tfstate'
+
+        - task: TerraformTask@5
+          inputs:
+            provider: 'azurerm'
+            command: 'validate'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
+
+        - task: TerraformTask@5
+          inputs:
+            provider: 'azurerm'
+            command: 'plan'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
+            environmentServiceNameAzureRM: 'Azure subscription 1(bc524287-f28f-43cf-9bc7-37559e1c0887)'
