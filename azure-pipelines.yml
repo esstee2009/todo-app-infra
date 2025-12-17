@@ -22,6 +22,7 @@ stages:
             provider: 'azurerm'
             command: 'init'
             workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
+            backendServiceArm: 'Azure subscription 1(bc524287-f28f-43cf-9bc7-37559e1c0887)'
             backendAzureRmStorageAccountName: 'tfstorage24'
             backendAzureRmContainerName: 'cloudcore'
             backendAzureRmKey: 'dev.tfstate'
