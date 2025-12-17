@@ -46,6 +46,7 @@ stages:
 
   - stage: Scan
     displayName: Scan
+    condition: always()
     jobs:
       - job: TfSecCheckov
         displayName: Scanning Tools
