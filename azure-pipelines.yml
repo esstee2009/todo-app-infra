@@ -15,6 +15,12 @@ variables:
   WorkDir: '$(System.DefaultWorkingDirectory)/environment/dev'
   ServConnect: 'Azure subscription 1(bc524287-f28f-43cf-9bc7-37559e1c0887)'
 
+parameters:
+- name: Conditionsb4Authorisation
+  displayName: Require tfsec&checkov scan to pass
+  type: boolean
+  default: true
+
 stages:
   - stage: Build
     displayName: Build
@@ -50,6 +56,7 @@ stages:
     jobs:
       - job: TfSecCheckov
         displayName: Scanning Tools
+        continueOnError: false 
         steps:
         - task: tfsec@1
           inputs:
