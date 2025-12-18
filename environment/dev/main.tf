@@ -21,8 +21,8 @@ module "vm" {
   virtual_machine = var.virtual_machine
 }
 
-module "kv" {
-  source          = "../../modules/azurerm_key_vault"
-  depends_on = [ module.network ]
-  keyvault_config = var.keyvault_config
-}
+# module "kv" {
+#   source          = "../../modules/azurerm_key_vault"
+#   depends_on = [ module.network ]
+#   keyvault_config = var.keyvault_config
+# }
