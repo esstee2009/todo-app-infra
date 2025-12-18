@@ -18,7 +18,7 @@ variables:
 parameters:
 - name: Conditionsb4Authorisation
   displayName: Require tfsec&checkov scan to pass
-  type: boolean
+  type: string
   default: false
   values:
     - true
