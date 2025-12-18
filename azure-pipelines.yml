@@ -55,7 +55,7 @@ stages:
 
   - stage: Scan
     displayName: Scan
-    condition: always()
+    condition: eq('${{ parameters.Conditionsb4Authorisation }}', 'true')
     jobs:
       - job: TfSecCheckov
         displayName: Scanning Tools
