@@ -1,10 +1,5 @@
 trigger: none
 
-branches: 
-    include: 
-    - main
-    - feature/*
-
 pool: JanAgent
 
 variables: 
