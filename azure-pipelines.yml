@@ -1,15 +1,11 @@
-trigger: 
+trigger: none
 
-  branches: 
+branches: 
     include: 
     - main
     - feature/*
 
-  paths: 
-    include: 
-    - '$(WorkDir)'
-
-pool: NovAgent
+pool: JanAgent
 
 variables: 
   WorkDir: '$(System.DefaultWorkingDirectory)/environment/dev'
